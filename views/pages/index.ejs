@@ -8,7 +8,14 @@
 
   Hello, world!
 
-  userId: <%= userId %>
+  <p>userId: <%= userId %></p>
+
+  <% if (userId) { %>
+    <ul>
+      <li> <a href="/my/projects">projects</a>
+      <li> <a href="/my/mailboxes">mailboxes</a>
+    </ul>
+  <% } %>
 
   <a href="/oauth">login</a>
 
