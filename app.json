@@ -1,8 +1,6 @@
 {
-  "name": "Start on Heroku: Node.js",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
-  "logo": "http://node-js-sample.herokuapp.com/node.svg",
-  "keywords": ["node", "express", "static"],
+  "name": "Whisky Foxtrot for Tango",
+  "description": "TT AEC Hackathon 2016 demo app",
+  "keywords": ["node", "express"],
   "image": "heroku/nodejs"
 }
