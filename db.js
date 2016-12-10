@@ -26,7 +26,7 @@ function memDB(cb) {
                 prjid: args.prjid,
                 keyid: args.keyid,
                 credentials: args.credentials,
-                expiry: args.expiry
+                expiryMillis: args.expiryMillis
             });
             cb(null);
         },
@@ -34,11 +34,12 @@ function memDB(cb) {
         getMailbox: function(mboxid, cb) {
             for (var i = 0; i < caps.length; i++) {
                 var c = caps[i];
-                if ((c.mboxid === mboxid) && (c.expiry < Date.now())) {
-                    cb(null, mboxid);
+                if ((c.mboxid === mboxid) && (c.expiryMillis > Date.now())) {
+                    cb(null, c);
+                    return;
                 }
             }
-            cb(new Error('no such mailbox'), null);
+            cb(new Error('no such mailbox in getMailbox'), null);
         },
 
         deleteMailbox: function(mboxid, userid, cb) {
@@ -62,7 +63,7 @@ function memDB(cb) {
                 var result = [];
                 for (var i = 0; i < caps.length; i++) {
                     var c = caps[i];
-                    if ((c.userid === userid) && (c.expiry < Date.now())) {
+                    if ((c.userid === userid) && (c.expiryMillis > Date.now())) {
                         result.push(c);
                     }
                 }

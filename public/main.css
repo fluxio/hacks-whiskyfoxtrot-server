@@ -1,0 +1,53 @@
+body{
+    font-family: Roboto, sans-serif;
+}
+a[href]{
+    color: #4455dd;
+}
+
+.mailboxListing{
+    margin-bottom: 5px;
+}
+.mailboxExpires{
+    color: #666;
+    padding: 0 0 0 20px;
+}
+.mailboxPost{
+    padding: 0 0 0 20px;
+}
+.mailboxPostInput{
+    width: 20em;
+}
+.deleteMailboxButton{
+    margin-left: 10px;
+}
+
+.projectList td{
+    vertical-align: top;
+    padding: 5px 10px;
+    border-bottom: solid 1px #f3f3f3;
+}
+.projectList td a{
+    text-decoration: none;
+}
+.projectList td a:hover{
+    text-decoration: underline;
+}
+.keyList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.keyid {
+    font-family: Consolas, Menlo, monospace;
+    color: #666;
+    padding: 0 10px;
+}
+.keyList li {
+    margin-bottom: 5px;
+}
+.keyList li button {
+    margin-right: 10px;
+}
+

@@ -30,11 +30,24 @@ var sdk = new fluxSDK(config.fluxClientId, {
     redirectUri: config.fluxRedirectUri
 });
 
+var dbConn;
+
 function withDBConn(cb) {
+    if (dbConn) {
+        cb(dbConn);
+        return;
+    }
+
     if (config.dbUrl) {
-        db.connectPG(config.dbUrl, cb);
+        db.connectPG(config.dbUrl, function(conn) {
+            dbConn = conn;
+            cb(conn);
+        });
     } else {
-        db.memDB(cb);
+        db.memDB(function(conn) {
+            dbConn = conn;
+            cb(conn);
+        });
     }
 }
 
@@ -47,7 +60,9 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+    strict: false
+}));
 
 app.use(session({
     secret: config.sessionSecret,
@@ -158,29 +173,28 @@ myRouter.get('/p/:prjid/keys', function(req, res, next) {
 
 // Mint a new mailbox for project ID & key.
 myRouter.post('/p/mailbox/:prjid/:keyid', function(req, res, next) {
-    var lifetime = req.body.lifetime;
-    if (typeof lifetime !== 'number') {
+    var lifetimeMillis = req.body.lifetimeMillis;
+    if (typeof lifetimeMillis !== 'number') {
         res.status(400).send('lifetime must be a number');
         return;
     }
     var dt = new sdk.DataTable(req.credentials, req.params.prjid);
     dt.listCells()
         .then(function(cells) {
-            crypto.randomBytes(24, function(err, bytes) {
+            crypto.randomBytes(24, function(err, mboxid) {
                 if (err) {
                     onInternalErr(res, err);
                     return;
                 }
-                var mboxid = mboxid.toString('hex');
 
                 withDBConn(function(dbConn) {
                     dbConn.saveMailbox({
-                        mboxid: mboxid,
+                        mboxid: mboxid.toString('hex'),
                         userid: fluxUserId(req.credentials),
                         prjid: req.params.prjid,
                         keyid: req.params.keyid,
                         credentials: JSON.stringify(req.credentials),
-                        expiry: Date.now() + lifetime
+                        expiryMillis: Date.now() + lifetimeMillis
                     }, function(err, mboxid) {
                         if (err) {
                             onInternalErr(res, err);
@@ -223,15 +237,16 @@ mailboxRouter.post('/:mboxid', requireSession, function(req, res, next) {
     withDBConn(function(dbConn) {
         dbConn.getMailbox(req.params.mboxid, function(err, info) {
             if (err) {
-                onInternalErr(err, res);
+                onInternalErr(res, err);
                 return;
             }
             if (!info) {
                 res.status(404).send('no such mailbox or mailbox expired');
                 return;
             }
-            var dt = new sdk.DataTable(info.credentials, info.prjid);
-            dt.req.cell.update(req.body)
+            var dt = new sdk.DataTable(JSON.parse(info.credentials), info.prjid);
+            console.log('posting update to ' + info.prjid + '/' + info.keyid + ': ' + JSON.stringify(req.body));
+            dt.getCell(info.keyid).update({value: req.body})
                 .then(function(response) {
                     res.json(response);
                 })

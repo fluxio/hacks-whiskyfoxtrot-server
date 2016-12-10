@@ -6,18 +6,26 @@
 
 <body>
 
-  Hello, world!
+  Whisky Foxtrot! Tango?
 
   <p>userId: <%= userId %></p>
 
-  <% if (userId) { %>
-    <ul>
-      <li> <a href="/my/projects">projects</a>
-      <li> <a href="/my/mailboxes">mailboxes</a>
-    </ul>
-  <% } %>
+  <% if (!userId) { %>
+    <a href="/oauth">login</a>
+  <% } else { %>
 
-  <a href="/oauth">login</a>
+    <h2>My mailboxes</h2>
+
+    <div id="mailboxListWrap">...</div>
+
+    <h2>My projects</h2>
+
+    <div id="projectListWrap">...</div>
+
+    <script src="/main.js"></script>
+
+  <% } %>
 
 </body>
 </html>
+
