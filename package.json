@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "Whisky Foxtrot",
-  "version": "0.1",
+  "name": "whisky-foxtrot-server",
+  "version": "0.1.0",
   "description": "Quick & dirty Flux sharing app for TT Hackathon 2016",
   "engines": {
     "node": "5.9.1"
