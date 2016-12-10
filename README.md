@@ -1,3 +1,5 @@
+## Running Locally
+
 Create the following .env:
 
 ```
@@ -12,8 +14,6 @@ Replace client_id_here and client_secret_here with your Flux client
 ID/secret.
 
 Replace session_secret_here with some arbitrary random string.
-
-## Running Locally
 
 ```sh
 $ npm install
