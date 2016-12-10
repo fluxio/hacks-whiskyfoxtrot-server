@@ -96,8 +96,6 @@ app.use('/oauthcb', function(req, res, next) {
 
     sdk.exchangeCredentials(req.session.state, req.session.nonce, req.query)
         .then(function(credentials) {
-            console.log('stashing credentials in session:');
-            console.log(credentials);
             req.session.fluxCredentials = credentials;
             res.redirect('/');
         })
