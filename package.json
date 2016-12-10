@@ -1,7 +1,8 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.2.5",
-  "description": "A sample Node.js app using Express 4",
+  "private": true,
+  "name": "Whisky Foxtrot",
+  "version": "0.1",
+  "description": "Quick & dirty Flux sharing app for TT Hackathon 2016",
   "engines": {
     "node": "5.9.1"
   },
@@ -14,16 +15,16 @@
     "ejs": "2.4.1",
     "express": "4.13.3",
     "express-session": "^1.14.2",
-    "flux-sdk-node": "^0.4.7"
+    "flux-sdk-node": "^0.4.7",
+    "pg": "^6.1.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/fluxio/hacks-whiskyfoxtrot-server"
   },
   "keywords": [
     "node",
     "heroku",
     "express"
-  ],
-  "license": "MIT"
+  ]
 }
