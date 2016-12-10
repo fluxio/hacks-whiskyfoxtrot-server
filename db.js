@@ -77,6 +77,6 @@ function memDB(cb) {
 };
 
 module.exports = {
-    connnectPG: connectPG,
+    connectPG: connectPG,
     memDB: memDB
 };

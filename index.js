@@ -31,6 +31,7 @@ var sdk = new fluxSDK(config.fluxClientId, {
 });
 
 var dbConn;
+var pgEnabled = false;
 
 function withDBConn(cb) {
     if (dbConn) {
@@ -38,7 +39,7 @@ function withDBConn(cb) {
         return;
     }
 
-    if (config.dbUrl) {
+    if (pgEnabled && config.dbUrl) {
         db.connectPG(config.dbUrl, function(conn) {
             dbConn = conn;
             cb(conn);
