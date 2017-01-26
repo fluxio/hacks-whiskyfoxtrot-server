@@ -205,6 +205,14 @@ function reloadMailboxList() {
                 var url = new URL(path, document.location).toString();
                 div.append(document.createTextNode(url));
 
+                var qrDiv = $(document.createElement('div'));
+                qrDiv.attr('class', 'mailboxQR');
+                var qrLink = $(document.createElement('a'));
+                qrLink.attr('href', '/mailbox/' + ent.mboxid + '/qr');
+                qrLink.append(document.createTextNode('qr code'));
+                qrDiv.append(qrLink);
+                div.append(qrDiv);
+
                 var expiresDiv = $(document.createElement('div'));
                 expiresDiv.attr('class', 'mailboxExpires');
                 expiresDiv.append(document.createTextNode('expires @ ' + new Date(ent.expiryMillis)));

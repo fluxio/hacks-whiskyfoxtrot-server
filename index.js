@@ -9,11 +9,13 @@ var session = require('express-session');
 
 // other npm libraries
 var fluxSDK = require('flux-sdk-node');
+var qrImage = require('qr-image');
 
 // local libs
 var db = require('./db');
 
 var config = {
+    baseURL: process.env.BASE_URL,
     debug: process.env.NODE_ENV !== 'production',
     dbUrl: process.env.DATABASE_URL,
     fluxClientId: process.env.FLUX_CLIENT_ID,
@@ -230,7 +232,27 @@ var mailboxRouter = express.Router();
 
 // Get an image of the QR code for a mailbox
 mailboxRouter.get('/:mboxid/qr', function(req, res, next) {
-    // TODO(keunwoo): implement me
+    withDBConn(function(dbConn) {
+        dbConn.getMailbox(req.params.mboxid, function(err, info) {
+            if (err) {
+                onInternalErr(res, err);
+                return;
+            }
+            if (!info) {
+                res.status(404).send('no such mailbox or mailbox expired');
+                return;
+            }
+            var data = JSON.stringify({
+                'url': config.baseURL + '/mailbox/' + req.params.mboxid,
+                'expires': info.expiryMillis
+            });
+            var img = qrImage.imageSync(data, {type: 'png'});
+            res.status(200)
+                .set({'Content-Type': 'image/png'})
+                .set({'Content-Disposition': 'inline'})
+                .send(img);
+        });
+    });
 });
 
 // Post a new value to the given mailbox.
