@@ -256,7 +256,7 @@ mailboxRouter.get('/:mboxid/qr', function(req, res, next) {
 });
 
 // Post a new value to the given mailbox.
-mailboxRouter.post('/:mboxid', requireSession, function(req, res, next) {
+mailboxRouter.post('/:mboxid', function(req, res, next) {
     withDBConn(function(dbConn) {
         dbConn.getMailbox(req.params.mboxid, function(err, info) {
             if (err) {
